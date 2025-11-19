@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	base = []UserCard{}
+	base = map[string]UserCard{}
 	name string
 	spec string
 	date time.Time
@@ -41,7 +41,7 @@ func Save(scanner *bufio.Scanner) error {
 		return err
 	}
 
-	base = append(base, UserCard{Name: name, Specialization: spec, Date: date})
+	base[name] = UserCard{Specialization: spec, Date: date}
 
 	return nil
 }
