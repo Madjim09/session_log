@@ -25,28 +25,28 @@ var (
 // Если запись с такими же данными уже существует, она будет добавлена повторно —
 // дедупликация не выполняется.
 func Save(scanner *bufio.Scanner) (map[string][]UserCard, error) {
+	fmt.Print("ФИО: ")
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-	fmt.Print("ФИО: ")
 	name, err = ValidFIO(scanner.Text())
 	if err != nil {
 		return base, err
 	}
 
+	fmt.Print("Специальность врача: ")
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-	fmt.Print("Специальность врача: ")
 	spec, err = ValidSpec(scanner.Text())
 	if err != nil {
 		return base, err
 	}
 
+	fmt.Print("Введите дату посещения в формате \"YYYY-MM-DD\": ")
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-	fmt.Print("Введите дату посещения в формате \"YYYY-MM-DD\": ")
 	date, err = ValidDate(scanner.Text())
 	if err != nil {
 		return base, err
@@ -66,12 +66,15 @@ func Save(scanner *bufio.Scanner) (map[string][]UserCard, error) {
 // Если пациент не найден (нет ни одной записи), возвращается ошибка ErrPatientNotFound.
 // В случае успеха выводит отформатированный список всех посещений на экран.
 func GetHistory(scanner *bufio.Scanner) ([]UserCard, error) {
+
+	fmt.Print("Введите ФИО: ")
 	if !scanner.Scan() {
 		return nil, scanner.Err()
 	}
-
-	fmt.Print("Введите ФИО: ")
 	name, err = ValidFIO(scanner.Text())
+	if err != nil {
+		return []UserCard{}, err
+	}
 
 	card := base[name]
 	if len(card) == 0 {
@@ -97,17 +100,19 @@ func GetHistory(scanner *bufio.Scanner) ([]UserCard, error) {
 // 5. Если посещение одно — возвращает его, независимо от специальности.
 // 6. Если посещений несколько — находит самое позднее к врачу с указанной специальностью.
 func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
+	fmt.Print("Введите ФИО: ")
 	if !scanner.Scan() {
 		return UserCard{}, scanner.Err()
 	}
-
-	fmt.Print("Введите ФИО: ")
 	name, err = ValidFIO(scanner.Text())
 	if err != nil {
 		return UserCard{}, err
 	}
 
 	fmt.Print("Специальность врача: ")
+	if !scanner.Scan() {
+		return UserCard{}, scanner.Err()
+	}
 	spec, err = ValidSpec(scanner.Text())
 	if err != nil {
 		return UserCard{}, err
@@ -131,4 +136,14 @@ func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
 	fmt.Printf("Последнее посещение: %s\n\n", base[name][imin].Date.Format("2006-01-02"))
 
 	return base[name][imin], nil
+}
+
+func ErrorHandling(e error, scanner *bufio.Scanner) bool {
+	if err != nil {
+		err = fmt.Errorf("ошибка ввода: %w", err)
+		fmt.Print(err)
+		fmt.Print("\n\n")
+		return true
+	}
+	return true
 }

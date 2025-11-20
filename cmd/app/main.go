@@ -29,33 +29,17 @@ func main() {
 		switch command {
 		case "save", "s":
 			_, err = util.Save(scanner)
-			flag = errorHandling(err, scanner)
+			flag = util.ErrorHandling(err, scanner)
 		case "gethistory", "gh":
 			_, err = util.GetHistory(scanner)
-			flag = errorHandling(err, scanner)
+			flag = util.ErrorHandling(err, scanner)
 		case "getlastvisit", "glv":
 			_, err = util.GetHistory(scanner)
-			flag = errorHandling(err, scanner)
+			flag = util.ErrorHandling(err, scanner)
 		case "exit", "e":
 			flag = false
 		default:
 			fmt.Print("Неизвестная команда\n\n")
 		}
-
 	}
-}
-
-func errorHandling(e error, scanner *bufio.Scanner) bool {
-	if err == scanner.Err() {
-		err = fmt.Errorf("ошибка ввода: %w", err)
-		fmt.Print(err)
-		return false
-	}
-	if err != nil {
-		err = fmt.Errorf("ошибка ввода: %w", err)
-		fmt.Print(err)
-		fmt.Print("\n\n")
-		return true
-	}
-	return true
 }
