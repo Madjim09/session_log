@@ -128,7 +128,7 @@ func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
 		}
 	}
 
-	fmt.Printf("Последнее посещение: %v\n\n", base[name][imin].Date)
+	fmt.Printf("Последнее посещение: %s\n\n", base[name][imin].Date.Format("2006-01-02"))
 
 	return base[name][imin], nil
 }
