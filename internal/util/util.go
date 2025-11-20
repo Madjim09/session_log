@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -132,24 +131,4 @@ func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
 	fmt.Printf("Последнее посещение: %s\n\n", base[name][imin].Date.Format("2006-01-02"))
 
 	return base[name][imin], nil
-}
-
-func QuestionUser(scanner *bufio.Scanner) (bool, error) {
-	fmt.Print("Хотите продолжить? [y/n]: ")
-	for {
-		if !scanner.Scan() {
-			return false, scanner.Err()
-		}
-		answer := strings.TrimSpace(strings.ToLower(scanner.Text()))
-		switch answer {
-		case "y", "yes", "да", "д":
-			fmt.Println()
-			return true, nil
-		case "n", "no", "нет", "н":
-			return false, nil
-		default:
-			fmt.Println("Неверный ввод.")
-			fmt.Print("Введите y (да) или n (нет): ")
-		}
-	}
 }

@@ -15,7 +15,7 @@ func main() {
 	flag := true
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fmt.Print("Команды:\nSave\nGetHistory\n\n")
+	fmt.Print("Команды:\nSave\nGetHistory\nExit\n\n")
 	for flag {
 		fmt.Println("Введите команду")
 		if !scanner.Scan() {
@@ -29,40 +29,33 @@ func main() {
 		switch command {
 		case "save", "s":
 			_, err = util.Save(scanner)
-			if err == scanner.Err() {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				flag = false
-			}
-			if err != nil {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				fmt.Print("\n\n")
-			}
+			flag = errorHandling(err, scanner)
 		case "gethistory", "gh":
 			_, err = util.GetHistory(scanner)
-			if err == scanner.Err() {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				flag = false
-			}
-			if err != nil {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				fmt.Print("\n\n")
-			}
+			flag = errorHandling(err, scanner)
 		case "getlastvisit", "glv":
 			_, err = util.GetHistory(scanner)
-			if err == scanner.Err() {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				flag = false
-			}
-			if err != nil {
-				err = fmt.Errorf("ошибка ввода: %w", err)
-				fmt.Print(err)
-				fmt.Print("\n\n")
-			}
+			flag = errorHandling(err, scanner)
+		case "exit", "e":
+			flag = false
+		default:
+			fmt.Print("Неизвестная команда\n\n")
 		}
+
 	}
+}
+
+func errorHandling(e error, scanner *bufio.Scanner) bool {
+	if err == scanner.Err() {
+		err = fmt.Errorf("ошибка ввода: %w", err)
+		fmt.Print(err)
+		return false
+	}
+	if err != nil {
+		err = fmt.Errorf("ошибка ввода: %w", err)
+		fmt.Print(err)
+		fmt.Print("\n\n")
+		return true
+	}
+	return true
 }
