@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	errEmptyLine = errors.New("empty line")
+	ErrEmptyLine = errors.New("empty line")
 	text         string
 	runes        []rune
 	parts        []string
@@ -35,7 +35,7 @@ func ValidFIO(str string) (string, error) {
 
 func ValidSpec(str string) (string, error) {
 	if str == "" {
-		return "", errEmptyLine
+		return "", ErrEmptyLine
 	}
 
 	text = strings.TrimSpace(str)
