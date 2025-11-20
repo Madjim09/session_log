@@ -100,7 +100,7 @@ func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
 	max := base[name][0].Date
 	imin := 0
 	for i, v := range base[name] {
-		if v.Date.After(max) {
+		if v.Date.After(max) && v.Specialization == spec {
 			max = v.Date
 			imin = i
 		}
