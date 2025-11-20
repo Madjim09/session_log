@@ -15,7 +15,7 @@ func main() {
 	flag := true
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fmt.Print("Команды:\nSave\nGetHistory\nExit\n\n")
+	fmt.Print("Команды:\nSave\nGetHistory\nGetLastVisit\nExit\n\n")
 	for flag {
 		fmt.Println("Введите команду")
 		if !scanner.Scan() {
