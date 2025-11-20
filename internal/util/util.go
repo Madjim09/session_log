@@ -21,7 +21,6 @@ func Save(scanner *bufio.Scanner) (map[string][]UserCard, error) {
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-
 	fmt.Print("ФИО: ")
 	name, err = ValidFIO(scanner.Text())
 	if err != nil {
@@ -31,7 +30,6 @@ func Save(scanner *bufio.Scanner) (map[string][]UserCard, error) {
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-
 	fmt.Print("Специальность врача: ")
 	spec, err = ValidSpec(scanner.Text())
 	if err != nil {
@@ -41,7 +39,6 @@ func Save(scanner *bufio.Scanner) (map[string][]UserCard, error) {
 	if !scanner.Scan() {
 		return base, scanner.Err()
 	}
-
 	fmt.Print("Введите дату посещения в формате \"YYYY-MM-DD\": ")
 	date, err = ValidDate(scanner.Text())
 	if err != nil {
@@ -77,3 +74,39 @@ func GetHistory(scanner *bufio.Scanner) ([]UserCard, error) {
 }
 
 // TODO: Операция GetLastVisit позволяет получить последнее посещение пациентом определенного специалиста в больнице
+func GetLastVisit(scanner *bufio.Scanner) (UserCard, error) {
+	if !scanner.Scan() {
+		return UserCard{}, scanner.Err()
+	}
+
+	fmt.Print("Введите ФИО: ")
+	name, err = ValidFIO(scanner.Text())
+	if err != nil {
+		return UserCard{}, err
+	}
+
+	fmt.Print("Специальность врача: ")
+	spec, err = ValidSpec(scanner.Text())
+	if err != nil {
+		return UserCard{}, err
+	}
+
+	visits := base[name]
+	if len(visits) == 0 {
+		return UserCard{}, ErrPatientNotFound
+	} else if len(visits) == 1 {
+		return base[name][0], nil
+	}
+	max := base[name][0].Date
+	imin := 0
+	for i, v := range base[name] {
+		if v.Date.After(max) {
+			max = v.Date
+			imin = i
+		}
+	}
+
+	fmt.Printf("Последнее посещение: %v\n\n", base[name][imin].Date)
+
+	return base[name][imin], nil
+}
