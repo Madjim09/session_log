@@ -34,7 +34,7 @@ func main() {
 			_, err = util.GetHistory(scanner)
 			flag = util.ErrorHandling(err, scanner)
 		case "getlastvisit", "glv":
-			_, err = util.GetHistory(scanner)
+			_, err = util.GetLastVisit(scanner)
 			flag = util.ErrorHandling(err, scanner)
 		case "exit", "e":
 			flag = false
